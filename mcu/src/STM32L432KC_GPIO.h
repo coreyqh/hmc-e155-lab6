@@ -12,8 +12,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // Values which "val" can take on in digitalWrite()
-#define PIO_LOW  0 // Value to write a pin low (0 V)
-#define PIO_HIGH 1 // Value to write a pin high (3.3 V)
+#define GPIO_LOW  0 // Value to write a pin low (0 V)
+#define GPIO_HIGH 1 // Value to write a pin high (3.3 V)
 
 // Arbitrary port IDs used to easily find a pin's port
 #define GPIO_PORT_A 0 // Arbitrary ID for GPIO Port A
