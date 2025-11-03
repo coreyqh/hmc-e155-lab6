@@ -62,19 +62,19 @@ int updateTempStatus(char request[]) {
   int temp_status = 0;
 
   if      (inString(request, "resolution8")==1) {
-		spiWrite(CONFIG_WADDR, RESOLUTION_8)
+		spiWrite(CONFIG_WADDR, RESOLUTION_8);
 	}  
   else if (inString(request, "resolution9")==1) {
-		spiWrite(CONFIG_WADDR, RESOLUTION_9)
+		spiWrite(CONFIG_WADDR, RESOLUTION_9);
 	}  
   else if (inString(request, "resolution10")==1) {
-		spiWrite(CONFIG_WADDR, RESOLUTION_10)
+		spiWrite(CONFIG_WADDR, RESOLUTION_10);
 	}  
   else if (inString(request, "resolution11")==1) {
-		spiWrite(CONFIG_WADDR, RESOLUTION_11)
+		spiWrite(CONFIG_WADDR, RESOLUTION_11);
 	}  
   else if (inString(request, "resolution12")==1) {
-		spiWrite(CONFIG_WADDR, RESOLUTION_12)
+		spiWrite(CONFIG_WADDR, RESOLUTION_12);
 	}  
 
   temp_status = spiRead(TMPMSB_RADDR);
@@ -105,7 +105,7 @@ int main(void) {
   USART_TypeDef * USART = initUSART(USART1_ID, 125000);
   
   // TODO: Add SPI initialization code
-  spiInit();
+  spiInit(0b111 , 0, 1);
 
   while(1) {
     /* Wait for ESP8266 to send a request.
@@ -125,13 +125,14 @@ int main(void) {
     }
 
     // TODO: Add SPI code here for reading temperature
-    int temp_status = updateTempStatus(request);
+    volatile int temp_status = updateTempStatus(request);
+    //int temp_status = 0;
     int sign = (temp_status >> 15) & 1;
 
     char tempStatusStr[50];
 
     temp_status &= ~(1 << 15);               // mask off sign bit to find magnitude
-    float temperature = temp_status / 16.0f; // convert fixed pt to floating pt
+    float temperature = temp_status / 256.0f; // convert fixed pt to floating pt
     temperature = sign ? -temperature : temperature; 
     sprintf(tempStatusStr, "Temperature: %.4f deg. C", temperature);
     
@@ -164,7 +165,7 @@ int main(void) {
     sendString(USART, "<h2>Temperature Status</h2>");
 
     sendString(USART, "<p>");
-    sendString(USART, ledStatusStr);
+    sendString(USART, tempStatusStr);
     sendString(USART, "</p>");  
 
   

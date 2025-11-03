@@ -23,7 +23,7 @@ typedef struct
 
 */
 
-#define CS_PIN   PB1 // TODO double check
+#define CS_PIN   PB1
 #define MOSI_PIN PB5
 #define MISO_PIN PB4
 #define SCK_PIN  PB3
