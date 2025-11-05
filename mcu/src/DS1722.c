@@ -14,12 +14,11 @@ void spiInit(uint32_t brc, uint32_t cpol, uint32_t cpha) {
     pinMode(SCK_PIN , GPIO_ALT);
     pinMode(CS_PIN  , GPIO_OUTPUT);
 
-    GPIOB->AFR[0] &= ~((0xF << 12) | (0xF << 16) | (0xF << 20)); // using AFRL
-    GPIOB->AFR[0] |=  ((5 << 12) | (5 << 16) | (5 << 20));
+    GPIOB->AFR[0] |= _VAL2FLD(GPIO_AFRL_AFSEL3, 5);
+    GPIOB->AFR[0] |= _VAL2FLD(GPIO_AFRL_AFSEL4, 5);
+    GPIOB->AFR[0] |= _VAL2FLD(GPIO_AFRL_AFSEL5, 5);
 
-    // OSPEED for SPI
-    GPIOB->OSPEEDR &= ~((3 << 6) | (3 << 8) | (3 << 10));
-    GPIOB->OSPEEDR |=  ((3 << 6) | (3 << 8) | (3 << 10));
+    GPIOB->OSPEEDR |= (GPIO_OSPEEDR_OSPEED3);
 
     // enable clock for SPI1
     RCC->APB2ENR |= _VAL2FLD(RCC_APB2ENR_SPI1EN, 1);
@@ -51,6 +50,7 @@ void spiInit(uint32_t brc, uint32_t cpol, uint32_t cpha) {
 
     spiWrite(0x80, 0xE0);
     int temp = spiRead(0x00);
+    int temp2 = spiRead(0x01);
 
 }
 

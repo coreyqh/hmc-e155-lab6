@@ -41,7 +41,7 @@ int inString(char request[], char des[]) {
 	return -1;
 }
 
-int updateLEDStatus(char request[]) {
+int updateLEDStatus(char request[], int prev_led_status) {
 
 	int led_status = 0;
 	// The request has been received. now process to determine whether to turn the LED on or off
@@ -52,7 +52,9 @@ int updateLEDStatus(char request[]) {
 	else if (inString(request, "ledon")==1) {
 		digitalWrite(LED_PIN, GPIO_HIGH);
 		led_status = 1;
-	}
+	} else {
+                led_status = prev_led_status;
+        }
 
 	return led_status;
 }
@@ -90,6 +92,9 @@ int updateTempStatus(char request[]) {
 /////////////////////////////////////////////////////////////////
 
 int main(void) {
+
+  int led_status = 0;
+
   configureFlash();
   configureClock();
 
@@ -104,7 +109,7 @@ int main(void) {
   
   USART_TypeDef * USART = initUSART(USART1_ID, 125000);
   
-  // TODO: Add SPI initialization code
+  // SPI initialization code
   spiInit(0b111 , 0, 1);
 
   while(1) {
@@ -124,7 +129,7 @@ int main(void) {
       request[charIndex++] = readChar(USART);
     }
 
-    // TODO: Add SPI code here for reading temperature
+    //  SPI code for reading temperature
     volatile int temp_status = updateTempStatus(request);
     //int temp_status = 0;
     int sign = (temp_status >> 15) & 1;
@@ -139,7 +144,7 @@ int main(void) {
 
     // Update string with current LED state
   
-    int led_status = updateLEDStatus(request);
+    led_status = updateLEDStatus(request, led_status);
 
     char ledStatusStr[20];
     if (led_status == 1)
