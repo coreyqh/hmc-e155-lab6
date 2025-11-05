@@ -64,6 +64,7 @@
       <file file_name="../src/DS1722.h" />
       <file file_name="../src/main.c" />
       <file file_name="../src/main.h" />
+      <file file_name="../src/main_AI.c" />
       <file file_name="../src/STM32L432KC.h" />
       <file file_name="../src/STM32L432KC_FLASH.c" />
       <file file_name="../src/STM32L432KC_FLASH.h" />
