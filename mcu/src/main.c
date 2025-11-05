@@ -61,7 +61,7 @@ int updateLEDStatus(char request[], int prev_led_status) {
 
 int updateTempStatus(char request[]) {
 
-  int temp_status = 0;
+  volatile int temp_status = 0;
 
   if      (inString(request, "resolution8")==1) {
 		spiWrite(CONFIG_WADDR, RESOLUTION_8);
@@ -79,6 +79,7 @@ int updateTempStatus(char request[]) {
 		spiWrite(CONFIG_WADDR, RESOLUTION_12);
 	}  
 
+  delay_millis(TIM15, 200);
   temp_status = spiRead(TMPMSB_RADDR);
   temp_status = temp_status << 8;
   temp_status = temp_status | spiRead(TMPLSB_RADDR);
@@ -103,6 +104,7 @@ int main(void) {
   gpioEnable(GPIO_PORT_C);
 
   pinMode(LED_PIN, GPIO_OUTPUT);
+  digitalWrite(LED_PIN, 0);
   
   RCC->APB2ENR |= (RCC_APB2ENR_TIM15EN);
   initTIM(TIM15);
@@ -151,6 +153,8 @@ int main(void) {
       sprintf(ledStatusStr,"LED is on!");
     else if (led_status == 0)
       sprintf(ledStatusStr,"LED is off!");
+
+    digitalWrite(LED_PIN, led_status);
 
     
 

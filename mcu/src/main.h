@@ -14,7 +14,7 @@
 #include "STM32L432KC.h"
 #include "DS1722.h"
 
-#define LED_PIN PA10 
+#define LED_PIN PB7 
 #define BUFF_LEN 32
 
 #endif // MAIN_H

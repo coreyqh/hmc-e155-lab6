@@ -92,7 +92,7 @@ void spiWrite(uint8_t address, uint8_t data) {
 uint8_t spiRead(uint8_t address) {
     
     digitalWrite(CS_PIN, GPIO_HIGH); // turn on chip select
-    int rd = (uint8_t) (spiSendReceive16(address << 8 | (1 << 15)) & 0x00FF);
+    int rd = (uint8_t) (spiSendReceive16(address << 8) & 0x00FF);
     digitalWrite(CS_PIN, GPIO_LOW); // turn off chip select
     return rd;
 
